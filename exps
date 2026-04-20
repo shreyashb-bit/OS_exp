@@ -1,0 +1,178 @@
+Exp 2
+#!/bin/bash
+echo "========== OS INFORMATION =========="
+cat /etc/os-release
+uname -r
+uname -a
+uname -v
+echo "===================================="
+echo "Top 10 Processes in Descending Order (CPU)"
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -10
+echo "===================================="
+echo "Processes with Highest Memory Usage"
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -5
+echo "===================================="
+echo "Current Logged-in User"
+whoami
+logname
+echo "===================================="
+echo "System Information"
+echo "Shell: $SHELL"
+echo "Home Directory: $HOME"
+uname -o
+echo "PATH: $PATH"
+pwd
+chmod +x exp2.sh
+./exp2.sh
+Exp 3
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+int main() {
+int src = open("source.txt", O_RDONLY);
+int dest = open("dest.txt", O_WRONLY | O_CREAT, 0644);
+char bu er[100];
+int n;
+while ((n = read(src, bu er, sizeof(bu er))) > 0) {
+write(dest, bu er, n);
+}
+close(src);
+close(dest);
+printf("File copied\n");
+return 0;
+}
+Exp 4
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+int main() {
+int pid = fork();
+if (pid == 0) {
+printf("Child PID: %d\n", getpid());
+printf("Parent PID: %d\n", getppid());
+} else {
+wait(NULL);
+printf("Parent Process\n");
+}
+return 0;
+}
+Exp 5
+#include <stdio.h>
+int main() {
+int bt[5] = {5, 3, 8, 6, 2};
+int wt[5], tat[5];
+wt[0] = 0;
+for(int i=1;i<5;i++)
+wt[i] = wt[i-1] + bt[i-1];
+for(int i=0;i<5;i++)
+tat[i] = wt[i] + bt[i];
+for(int i=0;i<5;i++)
+printf("P%d WT=%d TAT=%d\n", i+1, wt[i], tat[i]);
+return 0;
+}
+Exp 6
+#include <stdio.h>
+int main() {
+int bt[3] = {6, 8, 7};
+int rt[3];
+for(int i=0;i<3;i++)
+rt[i] = bt[i];
+int time = 0, done;
+do {
+done = 1;
+for(int i=0;i<3;i++) {
+if(rt[i] > 0) {
+done = 0;
+rt[i]--;
+time++;
+}
+}
+} while(!done);
+printf("Execution done\n");
+return 0;
+}
+Exp 7
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+sem_t empty, full;
+int bu er = 0;
+void* producer(void* arg) {
+sem_wait(&empty);
+bu er++;
+printf("Produced: %d\n", bu er);
+sem_post(&full);
+}
+void* consumer(void* arg) {
+sem_wait(&full);
+printf("Consumed: %d\n", bu er);
+bu er--;
+sem_post(&empty);
+}
+int main() {
+pthread_t p, c;
+sem_init(&empty, 0, 1);
+sem_init(&full, 0, 0);
+pthread_create(&p, NULL, producer, NULL);
+pthread_create(&c, NULL, consumer, NULL);
+pthread_join(p, NULL);
+pthread_join(c, NULL);
+return 0;
+}
+Exp 8
+#include <stdio.h>
+int main() {
+int alloc[3][3] = {{0,1,0},{2,0,0},{3,0,2}};
+int max[3][3] = {{7,5,3},{3,2,2},{9,0,2}};
+int avail[3] = {3,3,2};
+int need[3][3];
+for(int i=0;i<3;i++)
+for(int j=0;j<3;j++)
+need[i][j] = max[i][j] - alloc[i][j];
+printf("Need Matrix:\n");
+for(int i=0;i<3;i++){
+for(int j=0;j<3;j++)
+printf("%d ", need[i][j]);
+printf("\n");
+}
+return 0;
+}
+Exp 9
+#include <stdio.h>
+#include <pthread.h>
+void* philosopher(void* num) {
+int id = *(int*)num;
+printf("Philosopher %d is eating\n", id);
+}
+int main() {
+pthread_t p[5];
+int id[5];
+for(int i=0;i<5;i++) {
+id[i] = i;
+pthread_create(&p[i], NULL, philosopher, &id[i]);
+}
+for(int i=0;i<5;i++)
+pthread_join(p[i], NULL);
+return 0;
+}
+Exp 10
+#include <stdio.h>
+int main() {
+int pages[] = {1,2,3,2,4,1,5};
+int frame[3] = {-1,-1,-1};
+int faults = 0;
+for(int i=0;i<7;i++) {
+int found = 0;
+for(int j=0;j<3;j++)
+if(frame[j] == pages[i])
+found = 1;
+if(!found) {
+frame[i%3] = pages[i];
+faults++;
+}
+}
+printf("Page Faults: %d\n", faults);
+return 0;
+}
+Exp 1
+Echo , read , write , cal , date , uname , pwd , cd , mkdir , touch , cat , rmdir , tail, head , tac , id , useradd
